@@ -60,5 +60,5 @@ sistema-saude/
 | Módulo | Responsável | Branch |
 |---|---|---|
 | ProfissionalSaude | Pedro | feature/profissional-saude |
-| Atendimento | - | feature/atendimento |
+| Atendimento | Gabriel | feature/atendimento |
 | ExameLaboratorio | - | feature/exame-laboratorio |
