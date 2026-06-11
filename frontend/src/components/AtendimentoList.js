@@ -36,12 +36,12 @@ function AtendimentoList() {
 
   return (
     <div>
-      <div className="header">
-        <h2>🩺 Atendimentos</h2>
+      <div className="top-actions">
+        <h2>Atendimentos</h2>
         <Link to="/atendimentos/novo" className="btn btn-primary">+ Novo Atendimento</Link>
       </div>
 
-      <table className="table">
+      <table>
         <thead>
           <tr>
             <th>Título</th>
@@ -73,7 +73,7 @@ function AtendimentoList() {
         </tbody>
       </table>
 
-      {atendimentos.length === 0 && <p className="empty">Nenhum atendimento cadastrado.</p>}
+      {atendimentos.length === 0 && <p>Nenhum atendimento cadastrado.</p>}
     </div>
   );
 }
