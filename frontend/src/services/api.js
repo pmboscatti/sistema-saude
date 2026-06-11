@@ -17,4 +17,15 @@ export const profissionalSaudeService = {
   deletar: (id) => api.delete(`/profissionais/${id}`)
 };
 
+export const atendimentoService = {
+  listar: () => api.get('/atendimentos'),
+  buscar: (id) => api.get(`/atendimentos/${id}`),
+  buscarPorTitulo: (titulo) => api.get('/atendimentos/buscar', { params: { titulo } }),
+  buscarPorData: (data) => api.get(`/atendimentos/data/${data}`),
+  buscarPorHorario: (horario) => api.get(`/atendimentos/horario/${horario}`),
+  criar: (atendimento) => api.post('/atendimentos', atendimento),
+  atualizar: (id, atendimento) => api.put(`/atendimentos/${id}`, atendimento),
+  deletar: (id) => api.delete(`/atendimentos/${id}`)
+};
+
 export default api;

@@ -43,7 +43,7 @@ function AtendimentoForm() {
   return (
     <div>
       <h2>{id ? 'Editar Atendimento' : 'Novo Atendimento'}</h2>
-      <form onSubmit={handleSubmit} className="form">
+      <form onSubmit={handleSubmit}>
         
         <div className="form-group">
           <label>Título *</label>
@@ -98,8 +98,10 @@ function AtendimentoForm() {
           </select>
         </div>
 
-        <button type="submit" className="btn btn-primary">Salvar</button>
-        <button type="button" className="btn" onClick={() => navigate('/atendimentos')}>Cancelar</button>
+        <div className="actions">
+          <button type="submit" className="btn btn-primary">Salvar</button>
+          <button type="button" className="btn" onClick={() => navigate('/atendimentos')}>Cancelar</button>
+        </div>
       </form>
     </div>
   );
