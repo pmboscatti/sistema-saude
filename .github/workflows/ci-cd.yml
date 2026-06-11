@@ -1,0 +1,102 @@
+name: CI/CD Pipeline - Clinica de Saude
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  # ========================================
+  # JOB 1: TESTES DO BACKEND (Java/Spring Boot)
+  # ========================================
+  test-backend:
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: ./backend
+
+    steps:
+      - name: Checkout do código
+        uses: actions/checkout@v4
+
+      - name: Configurar Java 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: maven
+
+      - name: Testes Unitários (JUnit 5 + Mockito)
+        run: mvn test -Dtest="*ControllerTest" -B
+
+      - name: Testes de Integração (Spring Boot + H2)
+        run: mvn test -Dtest="IntegracaoTest" -B
+
+      - name: Cobertura de código (JaCoCo)
+        run: mvn verify -B
+
+  # ========================================
+  # JOB 2: BUILD DO FRONTEND (React)
+  # ========================================
+  test-frontend:
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: ./frontend
+
+    steps:
+      - name: Checkout do código
+        uses: actions/checkout@v4
+
+      - name: Configurar Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Instalar dependências
+        run: npm install
+
+      - name: Build de produção
+        run: npm run build
+
+  # ========================================
+  # JOB 3: DEPLOY (só na main, após testes passarem)
+  # ========================================
+  deploy:
+    needs: [test-backend, test-frontend]
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+
+    steps:
+      - name: Checkout do código
+        uses: actions/checkout@v4
+
+      - name: Testes de Aceitação (E2E com Docker)
+        run: |
+          docker-compose up --build -d
+          echo "Aguardando backend iniciar..."
+          for i in $(seq 1 12); do
+            sleep 15
+            if curl -sf http://localhost:8080/api/profissionais; then
+              echo "Backend pronto!"
+              break
+            fi
+            echo "Tentativa $i/12, aguardando..."
+          done
+          curl -f http://localhost:8080/api/profissionais || exit 1
+          curl -f http://localhost:3000 || exit 1
+          echo "Testes de aceitação passaram!"
+          docker-compose down
+
+      - name: Deploy backend no Render
+        run: |
+          curl -s "${{ secrets.RENDER_DEPLOY_HOOK_BACKEND }}"
+          echo "Deploy do backend disparado!"
+
+      - name: Deploy frontend no Render
+        run: |
+          curl -s "${{ secrets.RENDER_DEPLOY_HOOK_FRONTEND }}"
+          echo "Deploy do frontend disparado!"
