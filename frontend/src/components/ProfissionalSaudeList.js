@@ -65,7 +65,7 @@ function ProfissionalSaudeList() {
               <td>{p.telefone}</td>
               <td>{CATEGORIA_LABEL[p.categoria] || p.categoria}</td>
               <td>
-                <Link to={`/profissionais/editar/${p.id}`} className="btn btn-primary btn-sm">Editar</Link>
+                <Link to={`/profissionais/editar/${p.id}`} className="btn btn-sm">Editar</Link>
                 <button onClick={() => deletarProfissional(p.id)} className="btn btn-danger btn-sm">Excluir</button>
               </td>
             </tr>
