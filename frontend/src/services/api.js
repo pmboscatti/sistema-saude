@@ -27,5 +27,13 @@ export const atendimentoService = {
   atualizar: (id, atendimento) => api.put(`/atendimentos/${id}`, atendimento),
   deletar: (id) => api.delete(`/atendimentos/${id}`)
 };
-
+export const exameLaboratorioService = {
+  listar: () => api.get('/exames-laboratorio'),
+  buscar: (id) => api.get(`/exames-laboratorio/${id}`),
+  buscarPorDescricao: (descricao) => api.get('/exames-laboratorio/buscar', { params: { descricao } }),
+  buscarPorPosologia: (posologia) => api.get('/exames-laboratorio/posologia', { params: { posologia } }),
+  criar: (exame) => api.post('/exames-laboratorio', exame),
+  atualizar: (id, exame) => api.put(`/exames-laboratorio/${id}`, exame),
+  deletar: (id) => api.delete(`/exames-laboratorio/${id}`)
+};
 export default api;
